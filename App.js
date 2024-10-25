@@ -6,6 +6,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {NavigationContainer} from "@react-navigation/native";
 import Home from "./component/Home";
 import GamePlay from "./component/GamePlay";
+import WinScreen from "./component/WinScreen";
+import LoseScreen from "./component/LoseScreen";
 SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [loaded, error] = useFonts({
@@ -33,6 +35,14 @@ export default function App() {
                           component={GamePlay}
                           options={{ title: 'GamePlay' }}
             />
+          <Stack.Screen name="WinScreen"
+                        component={WinScreen}
+                        options={{ title: 'GamePlay' }}
+          />
+          <Stack.Screen name="LoseScreen"
+                        component={LoseScreen}
+                        options={{ title: 'GamePlay' }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
 

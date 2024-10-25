@@ -5,7 +5,6 @@ import {View, Image, StyleSheet, ImageBackground, TouchableOpacity, Animated, Al
 export default function GamePlay({ navigation }) {
     const [ballPosition, setBallPosition] = useState(0);
     const [guess, setGuess] = useState(0);
-    const [result, setResult] = useState(false);
     const [isReset, setIsReset] = useState(false);
     const [cupPosition, setCupPosition] = useState([
         useRef(new Animated.Value(0)).current,
@@ -31,15 +30,29 @@ export default function GamePlay({ navigation }) {
         setGuess(index);
         setTimeout(() => {
             if (index === ballPosition) {
-               Alert.alert('Congratulations!',' You win!',
-                   [{text: 'OK', onPress: () => setIsReset(!isReset)}]);
+                console.log(index)
+                navigation.navigate('WinScreen');
+
+            } else {
+                navigation.navigate('LoseScreen');
+
             }
         }, 500);
 
     };
     useEffect(() => {
-        setBallPosition(Math.floor(Math.random() * 3));
-    }, [isReset]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            setBallPosition(Math.floor(Math.random() * 3));
+            cupPosition.forEach((position) => {
+                Animated.timing(position, {
+                    toValue: 0,
+                    duration: 0,
+                    useNativeDriver: true,
+                }).start();
+            });
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     return (
             <ImageBackground source={require('../assets/RN-Test/background.png')} style={styles.background}>
@@ -71,11 +84,12 @@ const styles = StyleSheet.create({
     },
     cupsGroup: {
         flexDirection: 'row',
-        marginTop: 100,
-        zIndex: 1,
+        marginTop: 150,
+        zIndex: 2,
     },
     ball:{
-        position: 'relative'
+        position: 'absolute',
+        zIndex: 1,
     },
 
 });
